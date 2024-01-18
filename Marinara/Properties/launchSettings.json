@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Marinara3": {
+    "Marinara": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\Rhino 8\\System\\Rhino.exe",
       "commandLineArgs": ""
