@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Marinara3\Marinara.csproj" />
+    <ProjectReference Include="..\Marinara\Marinara.csproj" />
   </ItemGroup>
 
 </Project>
