@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>net7.0;net48</TargetFrameworks>
     <Version>1.0</Version>
-    <Title>Marinara3</Title>
-    <Description>Description of Marinara3</Description>
+    <Title>Marinara</Title>
+    <Description>Grasshopper library to create pasta shapes and mathematically defined forms.</Description>
     <TargetExt>.gha</TargetExt>
   </PropertyGroup>
   
