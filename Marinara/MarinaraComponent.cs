@@ -1,6 +1,7 @@
 using Ed.Eto;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Marinara.Properties;
 using Rhino.Geometry;
 using System;
 using System.Collections;
@@ -41,7 +42,33 @@ namespace Marinara
            Category, SubCategory)
         {
         }
-        public List<double> InitUVValues(GH_Interval interval, int steps)
+
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            // Every Marinara class has at least these three parameters
+            pManager.AddIntervalParameter("u domain", "u", "Domain of u", GH_ParamAccess.item);
+            pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, DEFAULT_STEPS);
+        }
+        protected void RetrieveAndInitUV(IGH_DataAccess DA)
+        {
+            // First, we need to retrieve all data from the input parameters.
+            // We'll start by declaring variables and assigning them starting values.
+            GH_Interval u_int = new GH_Interval();
+            GH_Interval v_int = new GH_Interval();
+            int steps = 0;
+
+            // Then we need to access the input parameters individually. 
+            // When data cannot be extracted from a parameter, we should abort this method.
+            if (!DA.GetData(0, ref u_int)) return;
+            if (!DA.GetData(1, ref v_int)) return;
+            if (!DA.GetData(2, ref steps)) return;
+
+
+
+            this.InitUV(u_int, v_int, steps);
+        }
+            public List<double> InitUVValues(GH_Interval interval, int steps)
         {
             List<double> vals = new List<double>();
 
@@ -67,31 +94,13 @@ namespace Marinara
 
             return true;
         }
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
-        {
-            // Use the pManager object to register your input parameters.
-            // You can often supply default values when creating parameters.
-            // All parameters must have the correct access type. If you want 
-            // to import lists or trees of values, modify the ParamAccess flag.
-           
-
-            // If you want to change properties of certain parameters, 
-            // you can use the pManager instance to access them by index:
-            //pManager[0].Optional = true;
-        }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // Use the pManager object to register your output parameters.
-            // Output parameters do not have default values, but they too must have the correct access type.
-           
-
-            // Sometimes you want to hide a specific parameter from the Rhino preview.
-            // You can use the HideParameter() method as a quick way:
-            //pManager.HideParameter(0);
+            pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -118,7 +127,7 @@ namespace Marinara
         public MSphere()
             : base("MSphere", "MSphere",
          "Generate a point sphere",
-         "Marinara", "Primitive")
+         "Marinara", "Chomas")
         {
            
 
@@ -129,35 +138,11 @@ namespace Marinara
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // Use the pManager object to register your input parameters.
-            // You can often supply default values when creating parameters.
-            // All parameters must have the correct access type. If you want 
-            // to import lists or trees of values, modify the ParamAccess flag.
+            base.RegisterInputParams(pManager);
+           
+        }
+
       
-
-            pManager.AddIntervalParameter("u domain", "u", "Domain of u", GH_ParamAccess.item);
-            pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, DEFAULT_STEPS);
-
-            // If you want to change properties of certain parameters, 
-            // you can use the pManager instance to access them by index:
-            //pManager[0].Optional = true;
-        }
-
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            // Use the pManager object to register your output parameters.
-            // Output parameters do not have default values, but they too must have the correct access type.
-            pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
-
-            // Sometimes you want to hide a specific parameter from the Rhino preview.
-            // You can use the HideParameter() method as a quick way:
-            //pManager.HideParameter(0);
-        }
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -242,7 +227,7 @@ namespace Marinara
         /// You can add image files to your project resources and access them like this:
         /// return Resources.IconForThisComponent;
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Resource1.MSphere;
 
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
@@ -254,7 +239,9 @@ namespace Marinara
     public class MPinch : MarinaraComponent
     {
         public MPinch()
-          : base("MPinch", "MPinch", "Pinch the geometry using exponents.", "Marinara", "Primitive")
+          : base("MPinch", "MPinch", "Pinch the geometry using exponents.", 
+                "Marinara",
+                "Chomas")
         {
            
         }
@@ -266,34 +253,15 @@ namespace Marinara
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // Use the pManager object to register your input parameters.
-            // You can often supply default values when creating parameters.
-            // All parameters must have the correct access type. If you want 
-            // to import lists or trees of values, modify the ParamAccess flag.
-            pManager.AddIntervalParameter("u domain", "u", "Domain of u", GH_ParamAccess.item);
-            pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, DEFAULT_STEPS);
+            base.RegisterInputParams(pManager);
             pManager.AddIntegerParameter("exponent", "exponent", "The pinch degree", GH_ParamAccess.item, DEFAULT_STEPS);
 
-            // If you want to change properties of certain parameters, 
-            // you can use the pManager instance to access them by index:
-            //pManager[0].Optional = true;
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            // Use the pManager object to register your output parameters.
-            // Output parameters do not have default values, but they too must have the correct access type.
-            pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
-
-            // Sometimes you want to hide a specific parameter from the Rhino preview.
-            // You can use the HideParameter() method as a quick way:
-            //pManager.HideParameter(0);
-        }
-
+       
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -312,7 +280,7 @@ namespace Marinara
             if (!DA.GetData(0, ref u_int)) return;
             if (!DA.GetData(1, ref v_int)) return;
             if (!DA.GetData(2, ref steps)) return;
-            if (!DA.GetData(3, ref pinch_degree)) return;
+            if (!DA.GetData(3, ref this.pinch_degree)) return;
             // We should now validate the data and warn the user if invalid data is supplied.
             /*
             if (radius0 < 0.0)
@@ -343,10 +311,10 @@ namespace Marinara
         {
             List<GH_Point> points = new List<GH_Point>();
             Debug.WriteLine($"Pinching");
-            int M = pinch_degree;
-            foreach (double u in u_vals)
+            int M = this.pinch_degree;
+            foreach (double u in this.u_vals)
             {
-                foreach (double v in v_vals)
+                foreach (double v in this.v_vals)
                 {
                     double x = Math.Sin(v) * Math.Pow(Math.Cos(u), M);
                     double y = Math.Sin(v) * Math.Pow(Math.Sin(u), M);
@@ -375,7 +343,7 @@ namespace Marinara
         /// You can add image files to your project resources and access them like this:
         /// return Resources.IconForThisComponent;
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Resource1.MPinch;
 
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
