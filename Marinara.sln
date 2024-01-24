@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34408.163
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marinara", "Marinara\Marinara.csproj", "{69E815FE-4434-41E1-A69A-D4BD57EE5D78}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarinaraTestSuite", "MarinaraTestSuite\MarinaraTestSuite.csproj", "{05E53351-8BA7-4ED4-95D1-65CFEDEDC085}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarinaraUnitTestSuite", "MarinaraUnitTestSuite\MarinaraUnitTestSuite.csproj", "{16D22167-8CC3-4783-87A8-EC43647EDB07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{05E53351-8BA7-4ED4-95D1-65CFEDEDC085}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05E53351-8BA7-4ED4-95D1-65CFEDEDC085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05E53351-8BA7-4ED4-95D1-65CFEDEDC085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16D22167-8CC3-4783-87A8-EC43647EDB07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16D22167-8CC3-4783-87A8-EC43647EDB07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16D22167-8CC3-4783-87A8-EC43647EDB07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16D22167-8CC3-4783-87A8-EC43647EDB07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
