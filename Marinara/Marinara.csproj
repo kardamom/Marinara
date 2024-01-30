@@ -13,6 +13,10 @@
   </Target>
   
   <ItemGroup>
+    <Compile Remove="UnitTest1.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Grasshopper" Version="8.3.24009.15001" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />

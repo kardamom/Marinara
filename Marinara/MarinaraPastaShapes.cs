@@ -31,20 +31,22 @@ namespace Marinara
             pManager.AddNumberParameter("plumpness", "Plumpness", "How plump is the pasta", GH_ParamAccess.item, DEFAULT_PLUMPNESS);
 
         }
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override Interval DefaultUDomain()
         {
-            base.RetrieveAndInitUV(DA);
-            if (!DA.GetData(3, ref this.plumpness)) return;
-
-            List<GH_Point> points = SolveMarinara();
-            // Assign the points to the output
-            DA.SetDataList(0, points);
+            return new Interval(0, 80);
+        }
+        protected override Interval DefaultVDomain()
+        {
+            return new Interval(0, 80);
         }
 
-        public List<GH_Point> SolveMarinara()
+
+        public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
         {
             Debug.WriteLine($"Fiocchi");
-            List<GH_Point> points = new List<GH_Point>();
+            List<Point3d> points = new List<Point3d>();
+            if (!DA.GetData(3, ref this.plumpness)) return points;
+
             foreach (double u in this.u_vals)
             {
                 foreach (double v in this.v_vals)
@@ -76,7 +78,7 @@ namespace Marinara
 
                     Point3d p1 = new Point3d(x, y, z);
                     Debug.WriteLine($"Generating point ({x},{y},{z})");
-                    points.Add(new GH_Point(p1));
+                    points.Add(p1);
 
                 }
             }
