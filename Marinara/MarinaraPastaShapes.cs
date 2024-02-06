@@ -22,13 +22,13 @@ namespace Marinara
         {
         }
 
-        private double DEFAULT_PLUMPNESS = 3;
-        private double plumpness;
+      
+        private double plumpness = 3;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             base.RegisterInputParams(pManager);
-            pManager.AddNumberParameter("plumpness", "Plumpness", "How plump is the pasta", GH_ParamAccess.item, DEFAULT_PLUMPNESS);
+            pManager.AddNumberParameter("plumpness", "Plumpness", "How plump is the pasta", GH_ParamAccess.item, plumpness);
 
         }
         protected override Interval DefaultUDomain()

@@ -7,7 +7,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using ExtensionMethods;
+using Grasshopper.Kernel.Data;
+using System.IO;
 
 namespace Marinara
 {
@@ -52,7 +56,7 @@ namespace Marinara
             // Every Marinara class has at least these three parameters
             pManager.AddIntervalParameter("u domain", "u", "Domain of u", GH_ParamAccess.item, this.DefaultUDomain());
             pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item, this.DefaultVDomain());
-            pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, 100);
+            pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, steps);
         }
         protected void RetrieveAndInitUV(IGH_DataAccess DA)
         {
@@ -105,8 +109,13 @@ namespace Marinara
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
+           // pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
             pManager.AddSurfaceParameter("Surface", "S", "Surface from points", GH_ParamAccess.list);
+            pManager.AddCurveParameter("UCurves", "UC", "U curves", GH_ParamAccess.list);
+            pManager.AddCurveParameter("VCurves", "VC", "V curves", GH_ParamAccess.list);
+            pManager.AddPointParameter("U", "utree", "Output U points", GH_ParamAccess.tree);
+
+            pManager.AddPointParameter("V", "vtree", "Output V points", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -117,19 +126,70 @@ namespace Marinara
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             this.RetrieveAndInitUV(DA);
-       
+
 
             List<Point3d> points = this.SolveMarinara(DA);
-        
-            
+
+
             NurbsSurface surface = NurbsSurface.CreateFromPoints(points, this.steps, this.steps, 3, 3);
 
-            DA.SetDataList(0, points);
-            DA.SetData(1, surface);
+            List<NurbsCurve> uCurves = new List<NurbsCurve>();
+            List<NurbsCurve> vCurves = new List<NurbsCurve>();
+            List<List<Point3d>> nestedPoints = new List<List<Point3d>>();
 
+            GH_Structure<GH_Point> uPointsTree = new GH_Structure<GH_Point>();
+            GH_Structure<GH_Point> vPointsTree = new GH_Structure<GH_Point>();
+
+            for (int i = 0; i < steps; i++)
+            {
+                int start = i * steps;
+
+                List<Point3d> slice = points.GetRange(start, steps);
+
+                NurbsCurve curve = NurbsCurve.Create(false, 3, slice);
+                nestedPoints.Add(slice);
+                uCurves.Add(curve);
+
+
+                GH_Path pth = new GH_Path(i);
+                for (int k=0; k < steps; k++)
+                {
+                    GH_Point ghP = new GH_Point(slice[k]);
+                    uPointsTree.Append(ghP, pth);    
+
+                }
+        
+
+            }
+            List<List<Point3d>> transposedPoints = nestedPoints.Transpose();
+
+            for (int j=0; j < transposedPoints.Count; j++)
+            {
+
+                NurbsCurve curve = NurbsCurve.Create(false, 3, transposedPoints[j]);
+                vCurves.Add(curve);
+
+                GH_Path pth = new GH_Path(j);
+                for (int k = 0; k < steps; k++)
+                {
+                    GH_Point ghP = new GH_Point(transposedPoints[j][k]);
+                    vPointsTree.Append(ghP, pth);
+
+                }
+
+            }
+
+
+            //DA.SetDataList(0, points);
+            DA.SetData(0, surface);
+            DA.SetDataList(1, uCurves);
+            DA.SetDataList(2, vCurves);
+            DA.SetDataTree(3, uPointsTree);
+            DA.SetDataTree(4, vPointsTree);
         }
         public abstract List<Point3d> SolveMarinara(IGH_DataAccess DA);
         public override Guid ComponentGuid => new Guid("96AA1085-52B3-45CB-AF3E-F1B2259EC521");
+
     }
 
     
