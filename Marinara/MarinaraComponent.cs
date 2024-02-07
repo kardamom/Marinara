@@ -1,35 +1,25 @@
-using Ed.Eto;
+using ExtensionMethods;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-using Marinara.Properties;
 using Rhino.Geometry;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using ExtensionMethods;
-using Grasshopper.Kernel.Data;
-using System.IO;
 
 namespace Marinara
 {
-
-
     public abstract class MarinaraComponent : GH_Component
     {
-
-
         protected List<double> u_vals = new List<double>();
         protected List<double> v_vals = new List<double>();
         protected int steps = 100;
 
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
+        /// Each implementation of GH_Component must provide a public
         /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
+        /// Category represents the Tab in which the component will appear,
+        /// Subcategory the panel. If you use non-existing tab or panel names,
         /// new tabs/panels will automatically be created.
         /// </summary>
 
@@ -48,8 +38,8 @@ namespace Marinara
         }
 
         protected abstract Interval DefaultUDomain();
-        protected abstract Interval DefaultVDomain();
 
+        protected abstract Interval DefaultVDomain();
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -58,6 +48,7 @@ namespace Marinara
             pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item, this.DefaultVDomain());
             pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, steps);
         }
+
         protected void RetrieveAndInitUV(IGH_DataAccess DA)
         {
             // First, we need to retrieve all data from the input parameters.
@@ -67,16 +58,15 @@ namespace Marinara
 
             Debug.WriteLine(u_int.ToString() + " " + v_int.ToString());
 
-            // Then we need to access the input parameters individually. 
+            // Then we need to access the input parameters individually.
             // When data cannot be extracted from a parameter, we should abort this method.
             if (!DA.GetData(0, ref u_int)) return;
             if (!DA.GetData(1, ref v_int)) return;
             if (!DA.GetData(2, ref steps)) return;
 
-
-
             this.InitUV(u_int, v_int, steps);
         }
+
         public List<double> InitUVValues(GH_Interval interval, int steps)
         {
             List<double> vals = new List<double>();
@@ -109,7 +99,7 @@ namespace Marinara
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-           // pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
+            // pManager.AddPointParameter("Points", "pts", "Output points", GH_ParamAccess.list);
             pManager.AddSurfaceParameter("Surface", "S", "Surface from points", GH_ParamAccess.list);
             pManager.AddCurveParameter("UCurves", "UC", "U curves", GH_ParamAccess.list);
             pManager.AddCurveParameter("VCurves", "VC", "V curves", GH_ParamAccess.list);
@@ -121,15 +111,13 @@ namespace Marinara
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             this.RetrieveAndInitUV(DA);
 
-
             List<Point3d> points = this.SolveMarinara(DA);
-
 
             NurbsSurface surface = NurbsSurface.CreateFromPoints(points, this.steps, this.steps, 3, 3);
 
@@ -150,22 +138,17 @@ namespace Marinara
                 nestedPoints.Add(slice);
                 uCurves.Add(curve);
 
-
                 GH_Path pth = new GH_Path(i);
-                for (int k=0; k < steps; k++)
+                for (int k = 0; k < steps; k++)
                 {
                     GH_Point ghP = new GH_Point(slice[k]);
-                    uPointsTree.Append(ghP, pth);    
-
+                    uPointsTree.Append(ghP, pth);
                 }
-        
-
             }
             List<List<Point3d>> transposedPoints = nestedPoints.Transpose();
 
-            for (int j=0; j < transposedPoints.Count; j++)
+            for (int j = 0; j < transposedPoints.Count; j++)
             {
-
                 NurbsCurve curve = NurbsCurve.Create(false, 3, transposedPoints[j]);
                 vCurves.Add(curve);
 
@@ -174,11 +157,8 @@ namespace Marinara
                 {
                     GH_Point ghP = new GH_Point(transposedPoints[j][k]);
                     vPointsTree.Append(ghP, pth);
-
                 }
-
             }
-
 
             //DA.SetDataList(0, points);
             DA.SetData(0, surface);
@@ -187,11 +167,9 @@ namespace Marinara
             DA.SetDataTree(3, uPointsTree);
             DA.SetDataTree(4, vPointsTree);
         }
+
         public abstract List<Point3d> SolveMarinara(IGH_DataAccess DA);
+
         public override Guid ComponentGuid => new Guid("96AA1085-52B3-45CB-AF3E-F1B2259EC521");
-
     }
-
-    
 }
-
