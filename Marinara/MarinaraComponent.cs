@@ -23,7 +23,7 @@ namespace Marinara
 
         protected List<double> u_vals = new List<double>();
         protected List<double> v_vals = new List<double>();
-        protected int steps = 10;
+        protected int steps = 100;
 
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
