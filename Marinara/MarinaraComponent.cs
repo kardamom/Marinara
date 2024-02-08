@@ -6,6 +6,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Marinara
 {
@@ -145,17 +146,17 @@ namespace Marinara
                     uPointsTree.Append(ghP, pth);
                 }
             }
-            List<List<Point3d>> transposedPoints = nestedPoints.Transpose();
+            var transposedPoints = nestedPoints.Transpose<Point3d>();
 
-            for (int j = 0; j < transposedPoints.Count; j++)
+            for (int j = 0; j < transposedPoints.Count(); j++)
             {
-                NurbsCurve curve = NurbsCurve.Create(false, 3, transposedPoints[j]);
+                NurbsCurve curve = NurbsCurve.Create(false, 3, transposedPoints.ElementAt(j));
                 vCurves.Add(curve);
 
                 GH_Path pth = new GH_Path(j);
                 for (int k = 0; k < steps; k++)
                 {
-                    GH_Point ghP = new GH_Point(transposedPoints[j][k]);
+                    GH_Point ghP = new GH_Point(transposedPoints.ElementAt(j).ElementAt(k));
                     vPointsTree.Append(ghP, pth);
                 }
             }
