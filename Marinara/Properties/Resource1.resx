@@ -127,11 +127,17 @@
   <data name="MFusilliCapri" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ComponentIcons\MFusilliCapri.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MLancette" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ComponentIcons\MLancette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MPinch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ComponentIcons\MPinch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MRadiatori" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ComponentIcons\MRadiatori.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MScialatielli" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ComponentIcons\MScialatielli.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ComponentIcons\MSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

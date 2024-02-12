@@ -93,6 +93,16 @@ namespace Marinara.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MLancette {
+            get {
+                object obj = ResourceManager.GetObject("MLancette", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MPinch {
             get {
                 object obj = ResourceManager.GetObject("MPinch", resourceCulture);
@@ -106,6 +116,16 @@ namespace Marinara.Properties {
         internal static System.Drawing.Bitmap MRadiatori {
             get {
                 object obj = ResourceManager.GetObject("MRadiatori", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MScialatielli {
+            get {
+                object obj = ResourceManager.GetObject("MScialatielli", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

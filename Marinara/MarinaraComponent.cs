@@ -14,6 +14,8 @@ namespace Marinara
     {
         protected List<double> u_vals = new List<double>();
         protected List<double> v_vals = new List<double>();
+        protected Interval uInterval = new Interval();
+        protected Interval vInterval = new Interval();
         protected int steps = 100;
 
         /// <summary>
@@ -89,6 +91,9 @@ namespace Marinara
 
         public Boolean InitUV(GH_Interval u_int, GH_Interval v_int, int steps)
         {
+            uInterval = new Interval(u_int.Value.T0, u_int.Value.T1);
+            vInterval = new Interval(v_int.Value.T0, v_int.Value.T1);
+
             u_vals = InitUVValues(u_int, steps);
             v_vals = InitUVValues(v_int, steps);
 

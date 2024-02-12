@@ -302,4 +302,158 @@ namespace Marinara
         public override GH_Exposure Exposure => GH_Exposure.primary;
         protected override System.Drawing.Bitmap Icon => Resource1.MCasarecce;
     }
+
+    public class MLancette : MarinaraComponent
+    {
+        public MLancette()
+         : base("MLancette",
+                "MLancette",
+                "Hands of a clock",
+               "Marinara",
+               "Pasta")
+        {
+        }
+
+        private double radius = 4;
+
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            base.RegisterInputParams(pManager);
+            pManager.AddNumberParameter("radius", "radius", "Radius of the pasta", GH_ParamAccess.item, radius);
+        }
+
+        protected override Interval DefaultUDomain()
+        {
+            return new Interval(0, 50);
+        }
+
+        protected override Interval DefaultVDomain()
+        {
+            return new Interval(0, 90);
+        }
+
+        public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
+        {
+            Debug.WriteLine($"Lancette");
+            List<Point3d> points = new List<Point3d>();
+            if (!DA.GetData(3, ref this.radius)) return points;
+
+            foreach (double u in this.u_vals)
+            {
+                foreach (double v in this.v_vals)
+                {
+                    double x, y, z;
+
+                    x = this.radius * Math.Cos(Math.PI * 3 * this.HelperZeta(u, v) / 50);
+                    y = this.radius * Math.Sin(Math.PI * 3 * this.HelperZeta(u, v) / 50) *
+                        Math.Pow((0.3 + (1 - Math.Sin(Math.PI * v / 90))), 0.6);
+                    z = v / 3;
+                    Point3d p1 = new Point3d(x, y, z);
+
+                    points.Add(p1);
+                }
+            }
+            return points;
+        }
+
+        private double HelperAlpha(double v)
+        {
+            return this.radius / 10 * Math.Sin(Math.PI * 5 * v / 9);
+        }
+
+        private double HelperBeta(double v)
+        {
+            return Math.Sin(Math.PI * (v + 45) / 90);
+        }
+
+        private double HelperGamma(double u, double v)
+        {
+            double gamma = ((3 * u - 75) / 5) * Math.Sin(Math.PI * v / 90) -
+                Math.Pow(1 - Math.Sin(Math.PI * u / 50), 25) *
+                HelperAlpha(v) *
+                HelperBeta(v);
+            return gamma;
+        }
+
+        private double HelperZeta(double u, double v)
+        {
+            double zeta;
+            if (u < 25)
+            {
+                zeta = HelperGamma(u, v);
+            }
+            else
+            {
+                zeta = 30 * ((u - 25) / 50) * Math.Sin(Math.PI * v / 90) +
+                    Math.Sin(Math.PI * ((u - 25) / 50)) *
+                    HelperAlpha(v) * HelperBeta(v);
+            }
+            return zeta;
+        }
+
+        public override Guid ComponentGuid => new Guid("FE653446-179D-49D8-AD90-7E3241DD38E7");
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        protected override System.Drawing.Bitmap Icon => Resource1.MLancette;
+    }
+
+    public class MScialatielli : MarinaraComponent
+    {
+        public MScialatielli()
+         : base("MScialatielli",
+                "MScialatielli",
+                "Rustic Amalfi pasta",
+               "Marinara",
+               "Pasta")
+        {
+        }
+
+        private double pinch = 3;
+
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            base.RegisterInputParams(pManager);
+            pManager.AddNumberParameter("pinch", "pinch", "How pinched is the profile", GH_ParamAccess.item, pinch);
+        }
+
+        protected override Interval DefaultUDomain()
+        {
+            return new Interval(0, 150);
+        }
+
+        protected override Interval DefaultVDomain()
+        {
+            return new Interval(0, 50);
+        }
+
+        public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
+        {
+            Debug.WriteLine($"Lancette");
+            List<Point3d> points = new List<Point3d>();
+            if (!DA.GetData(3, ref this.pinch)) return points;
+
+            foreach (double u in this.u_vals)
+            {
+                foreach (double v in this.v_vals)
+                {
+                    double x, y, z;
+
+                    x = 0.1 * Math.Cos(Math.PI * u / (uInterval.T1 / 2)) +
+                        0.1 * Math.Pow(Math.Cos(Math.PI * (u + uInterval.T1 / 20) / (uInterval.T1 / 2)), this.pinch) +
+                        0.1 * Math.Sin(Math.PI * v / vInterval.T1);
+                    y = 0.1 * Math.Cos(Math.PI * u / (uInterval.T1 / 2)) +
+                        0.2 * Math.Pow(Math.Sin(Math.PI * u / (uInterval.T1 / 2)), this.pinch) +
+                        0.1 * Math.Sin(Math.PI * v / vInterval.T1);
+                    z = 3 * v / vInterval.T1;
+                    Point3d p1 = new Point3d(x, y, z);
+
+                    points.Add(p1);
+                }
+            }
+            return points;
+        }
+
+        public override Guid ComponentGuid => new Guid("BB721D66-1FC6-48AC-8D40-EA140F99A024");
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        protected override System.Drawing.Bitmap Icon => Resource1.MScialatielli;
+    }
 }
