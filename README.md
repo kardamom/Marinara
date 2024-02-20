@@ -39,4 +39,4 @@
 </ul>
 
 <h2>Samples</h2>
-![6 pasta shapes](https://github.com/kardamom/Marinara/raw/master/Docs/Pasta-6up.png)
+![6 pasta shapes](Docs/Pasta-6up.png?raw=true)
