@@ -15,7 +15,7 @@ This first stage is all about creating digital surfaces and UV curves representi
 * Fiocchi Rigati
 
 ## Installation
-Copy Marinara.gha to your Grasshopper components folder. Restart Rhino.
+Copy [Marinara.gha ](https://github.com/kardamom/Marinara/releases/) to your Grasshopper components folder. Restart Rhino.
 
 The library should appear under in Grasshopper under a new tab, 'Marinara'.
 
