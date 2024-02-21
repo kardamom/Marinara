@@ -1,9 +1,7 @@
 # Marinara
 A Grasshopper component library to generate the pasta forms mathematically defined in George L Legendre's 2011 book _Pasta By Design_. Also included are some of the forms from Joseph Choma's 2015 book _Morphing_.
 
-This is a student research project for Spring Semester 2024. I am Master of Architecture candidate at the University of Southern California. My main aims are to learn C#, further my understanding of computational geometry, and learn about the internals of Grasshopper and Rhino.
-
-This first stage is all about creating digital surfaces and UV curves representing the pasta, and from there drawings. Later on I will attempt to make physical models of the forms, avoiding 3d printing as much as possible. I will also investigate how these forms could be applied to architecture.
+This is an ongoing student research project for Spring Semester 2024.
 
 ## Implemented pasta
 
