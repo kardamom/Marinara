@@ -11,6 +11,8 @@ This is an ongoing student research project for Spring Semester 2024.
 * Lancette
 * Scialatielli
 * Fiocchi Rigati
+* Agnolotti
+* Riccioli Ai Cinque Sapori
 
 ## Installation
 Copy [Marinara.gha ](https://github.com/kardamom/Marinara/releases/) to your Grasshopper components folder. Restart Rhino.
