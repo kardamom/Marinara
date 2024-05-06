@@ -456,4 +456,127 @@ namespace Marinara
         public override GH_Exposure Exposure => GH_Exposure.primary;
         protected override System.Drawing.Bitmap Icon => Resource1.MScialatielli;
     }
+
+    public class MAgnolotti : MarinaraComponent
+    {
+        public MAgnolotti()
+         : base("MAgnolotti",
+                "MAgnolotti",
+                "Shells from Piedmont.",
+               "Marinara",
+               "Pasta")
+        {
+        }
+
+        private double plumpness = 3;
+
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            base.RegisterInputParams(pManager);
+            pManager.AddNumberParameter("plumpness", "plumpness", "How plump is the pasta", GH_ParamAccess.item, plumpness);
+        }
+
+        protected override Interval DefaultUDomain()
+        {
+            return new Interval(0, 60);
+        }
+
+        protected override Interval DefaultVDomain()
+        {
+            return new Interval(0, 100);
+        }
+
+        public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
+        {
+            Debug.WriteLine(this.GetType().Name);
+            List<Point3d> points = new List<Point3d>();
+            if (!DA.GetData(3, ref this.plumpness)) return points;
+
+            foreach (double u in this.u_vals)
+            {
+                foreach (double v in this.v_vals)
+                {
+                    double x, y, z;
+
+                    x = (10 * Math.Pow(Math.Sin(Math.PI * (u / 120)), 0.5) +
+                        ((u / 400) * Math.Sin((3 * v / 10) * Math.PI)))
+                        *
+                        Math.Cos(((19 * v * Math.PI) / 2000) + (0.03 * Math.PI));
+
+                    y = ((10 * Math.Sin(Math.PI * (u / 120))) +
+                          ((u / 400) * Math.Cos((3 * v / 10) * Math.PI))) *
+                        Math.Sin((19 * v * Math.PI / 2000) + 0.03 * Math.PI);
+
+                    z = (5 * (Math.Pow(Math.Cos(Math.PI * u / 120), 5)) *
+                        Math.Sin(Math.PI * v / 100)) -
+                        (5 * (Math.Sin(Math.PI * v / 100)) *
+                        Math.Pow(Math.Cos(Math.PI * u / 120), 200));
+
+                    Point3d p1 = new Point3d(x, y, z);
+
+                    points.Add(p1);
+                }
+            }
+            return points;
+        }
+
+        public override Guid ComponentGuid => new Guid("B89724A4-7477-4E96-88EC-DE663607F3BC");
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        protected override System.Drawing.Bitmap Icon => Resource1.MAgnolotti;
+    }
+
+    public class MCinqueSapori : MarinaraComponent
+    {
+        public MCinqueSapori()
+         : base("MCinqueSapori",
+                "MCinqueSapori",
+                "Curls in five flavors.",
+               "Marinara",
+               "Pasta")
+        {
+        }
+
+        protected override Interval DefaultUDomain()
+        {
+            return new Interval(0, 20);
+        }
+
+        protected override Interval DefaultVDomain()
+        {
+            return new Interval(0, 100);
+        }
+
+        public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
+        {
+            Debug.WriteLine(this.GetType().Name);
+            List<Point3d> points = new List<Point3d>();
+
+            foreach (double u in this.u_vals)
+            {
+                foreach (double v in this.v_vals)
+                {
+                    double x, y, z;
+                    double pi = Math.PI;
+
+                    x = 1.5 * Math.Cos(pi * u / 20) *
+                        (1 + 0.5 * Math.Sin(pi * v / 25) * Math.Sin(pi * u / 40)) +
+                        0.43 * Math.Sin(pi * ((v + 18.75) / 25)) * Math.Cos(pi * u / 40) +
+                        2 * Math.Cos(pi * v / 50);
+
+                    y = 1.5 * Math.Pow(Math.Sin(pi * u / 20), 3) +
+                        Math.Cos(pi * v / 25);
+                    z = Math.Sin(pi * v / 100) + 20 * Math.Pow(Math.Cos(pi * v / 200), 2);
+
+                    Point3d p1 = new Point3d(x, y, z);
+
+                    points.Add(p1);
+                }
+            }
+            return points;
+        }
+
+        public override Guid ComponentGuid => new Guid("F48CB779-D7A8-4E11-BF07-4C9975D5CD78");
+        public override GH_Exposure Exposure => GH_Exposure.primary;
+        protected override System.Drawing.Bitmap Icon => Resource1.MCinqueSapori;
+    }
 }

@@ -63,9 +63,29 @@ namespace Marinara.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MAgnolotti {
+            get {
+                object obj = ResourceManager.GetObject("MAgnolotti", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MCasarecce {
             get {
                 object obj = ResourceManager.GetObject("MCasarecce", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MCinqueSapori {
+            get {
+                object obj = ResourceManager.GetObject("MCinqueSapori", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
