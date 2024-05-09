@@ -27,7 +27,8 @@ The default values are enough to generate a pasta form.
 * U domain - domain of values for U
 * V domain - domain of values for V
 * steps - how many points should we make in each of U and V
-* radius/plumpness/etc - each pasta has at least one additional parameter to manipulate the form
+* max_dimension - set this to resize the shape to fit a box with this as the longest side. Leave at -1 for actual size in mm.
+* radius/plumpness/etc - additional parameters to manipulate the form
 
 ### Outputs
 
