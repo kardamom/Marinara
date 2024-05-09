@@ -127,7 +127,7 @@ namespace Marinara
         {
             Debug.WriteLine($"Radiatori");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.tightness)) return points;
+            if (!DA.GetData(4, ref this.tightness)) return points;
 
             foreach (double u in this.u_vals)
             {
@@ -196,7 +196,7 @@ namespace Marinara
         {
             Debug.WriteLine($"Radiatori");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.radius)) return points;
+            if (!DA.GetData(4, ref this.radius)) return points;
 
             foreach (double u in this.u_vals)
             {

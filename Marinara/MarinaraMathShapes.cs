@@ -132,7 +132,7 @@ namespace Marinara
         {
             List<Point3d> points = new List<Point3d>();
 
-            if (!DA.GetData(3, ref this.pinch_degree)) return points;
+            if (!DA.GetData(4, ref this.pinch_degree)) return points;
 
             Debug.WriteLine($"Pinching");
             int M = this.pinch_degree;

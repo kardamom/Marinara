@@ -17,6 +17,7 @@ namespace Marinara
         protected Interval uInterval = new Interval();
         protected Interval vInterval = new Interval();
         protected int steps = 100;
+        protected double max_dimension = -1;
 
         /// <summary>
         /// Each implementation of GH_Component must provide a public
@@ -46,10 +47,11 @@ namespace Marinara
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // Every Marinara class has at least these three parameters
+            // Every Marinara class has at least these four parameters
             pManager.AddIntervalParameter("u domain", "u", "Domain of u", GH_ParamAccess.item, this.DefaultUDomain());
             pManager.AddIntervalParameter("v domain", "v", "Domain of v", GH_ParamAccess.item, this.DefaultVDomain());
             pManager.AddIntegerParameter("steps", "steps", "Number of points to create per u and v", GH_ParamAccess.item, steps);
+            pManager.AddNumberParameter("max dimension", "max", "Maximum length in any axis. Set to -1 to leave actual size (mm)", GH_ParamAccess.item, max_dimension);
         }
 
         protected void RetrieveAndInitUV(IGH_DataAccess DA)
@@ -66,6 +68,7 @@ namespace Marinara
             if (!DA.GetData(0, ref u_int)) return;
             if (!DA.GetData(1, ref v_int)) return;
             if (!DA.GetData(2, ref steps)) return;
+            if (!DA.GetData(3, ref max_dimension)) return;
 
             this.InitUV(u_int, v_int, steps);
         }
@@ -100,6 +103,44 @@ namespace Marinara
             return true;
         }
 
+        private List<Point3d> NormalizePoints(List<Point3d> pts, double max_dim)
+        {
+            double x_min, x_max, y_min, y_max, z_min, z_max, x_range, y_range, z_range;
+            x_min = y_min = z_min = float.MaxValue;
+            x_max = y_max = z_max = float.MinValue;
+            x_range = y_range = z_range = 0;
+
+            foreach (Point3d pt in pts)
+            {
+                x_max = Math.Max(x_max, pt.X);
+                y_max = Math.Max(y_max, pt.Y);
+                z_max = Math.Max(z_max, pt.Z);
+
+                x_min = Math.Min(x_min, pt.X);
+                y_min = Math.Min(y_min, pt.Y);
+                z_min = Math.Min(z_min, pt.Z);
+            }
+            x_range = x_max - x_min;
+            y_range = y_max - y_min;
+            z_range = z_max - z_min;
+
+            double max_range = Math.Max(x_range, Math.Max(y_range, z_range));
+            double ratio = max_dimension / max_range;
+
+            Console.WriteLine($"Max range <{max_range}> Ratio >{ratio}>");
+
+            List<Point3d> new_pts = new List<Point3d>();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                Point3d new_pt = new Point3d();
+                new_pt.X = pts[i].X * ratio;
+                new_pt.Y = pts[i].Y * ratio;
+                new_pt.Z = pts[i].Z * ratio;
+                new_pts.Add(new_pt);
+            }
+            return new_pts;
+        }
+
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
@@ -110,7 +151,6 @@ namespace Marinara
             pManager.AddCurveParameter("UCurves", "UC", "U curves", GH_ParamAccess.list);
             pManager.AddCurveParameter("VCurves", "VC", "V curves", GH_ParamAccess.list);
             pManager.AddPointParameter("U", "utree", "Output U points", GH_ParamAccess.tree);
-
             pManager.AddPointParameter("V", "vtree", "Output V points", GH_ParamAccess.tree);
         }
 
@@ -124,6 +164,11 @@ namespace Marinara
             this.RetrieveAndInitUV(DA);
 
             List<Point3d> points = this.SolveMarinara(DA);
+
+            if (this.max_dimension != -1)
+            {
+                points = this.NormalizePoints(points, this.max_dimension);
+            }
 
             NurbsSurface surface = NurbsSurface.CreateFromPoints(points, this.steps, this.steps, 3, 3);
 
