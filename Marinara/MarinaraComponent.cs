@@ -16,7 +16,7 @@ namespace Marinara
         protected List<double> v_vals = new List<double>();
         protected Interval uInterval = new Interval();
         protected Interval vInterval = new Interval();
-        protected int steps = 100;
+        protected int steps = 70;
         protected double max_dimension = -1;
 
         /// <summary>
@@ -61,8 +61,6 @@ namespace Marinara
             GH_Interval u_int = new GH_Interval(this.DefaultUDomain());
             GH_Interval v_int = new GH_Interval(this.DefaultVDomain());
 
-            Debug.WriteLine(u_int.ToString() + " " + v_int.ToString());
-
             // Then we need to access the input parameters individually.
             // When data cannot be extracted from a parameter, we should abort this method.
             if (!DA.GetData(0, ref u_int)) return;
@@ -105,38 +103,23 @@ namespace Marinara
 
         private List<Point3d> NormalizePoints(List<Point3d> pts, double max_dim)
         {
-            double x_min, x_max, y_min, y_max, z_min, z_max, x_range, y_range, z_range;
-            x_min = y_min = z_min = float.MaxValue;
-            x_max = y_max = z_max = float.MinValue;
-            x_range = y_range = z_range = 0;
+            Debug.WriteLine("Normalizing " + this.GetType().Name);
 
-            foreach (Point3d pt in pts)
-            {
-                x_max = Math.Max(x_max, pt.X);
-                y_max = Math.Max(y_max, pt.Y);
-                z_max = Math.Max(z_max, pt.Z);
+            BoundingBox bb = new BoundingBox(pts);
+            Line[] edges = bb.GetEdges();
+            double current_max = edges.OrderByDescending(x => x.Length).First().Length;
 
-                x_min = Math.Min(x_min, pt.X);
-                y_min = Math.Min(y_min, pt.Y);
-                z_min = Math.Min(z_min, pt.Z);
-            }
-            x_range = x_max - x_min;
-            y_range = y_max - y_min;
-            z_range = z_max - z_min;
-
-            double max_range = Math.Max(x_range, Math.Max(y_range, z_range));
-            double ratio = max_dimension / max_range;
-
-            Console.WriteLine($"Max range <{max_range}> Ratio >{ratio}>");
+            double new_ratio = max_dim / current_max;
+            Point3d center = bb.Center;
+            Transform sc = Transform.Scale(center, new_ratio);
+            Debug.WriteLine($"BB Center {center} Max: {current_max} new_ratio {new_ratio}");
 
             List<Point3d> new_pts = new List<Point3d>();
             for (int i = 0; i < pts.Count; i++)
             {
-                Point3d new_pt = new Point3d();
-                new_pt.X = pts[i].X * ratio;
-                new_pt.Y = pts[i].Y * ratio;
-                new_pt.Z = pts[i].Z * ratio;
-                new_pts.Add(new_pt);
+                Point pt = new Point(pts[i]);
+                pt.Transform(sc);
+                new_pts.Add(pt.Location);
             }
             return new_pts;
         }
@@ -161,6 +144,7 @@ namespace Marinara
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            Debug.WriteLine("Solving " + this.GetType().Name);
             this.RetrieveAndInitUV(DA);
 
             List<Point3d> points = this.SolveMarinara(DA);

@@ -38,10 +38,9 @@ namespace Marinara
 
         public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
         {
-            Debug.WriteLine($"Fiocchi");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.plumpness)) return points;
-
+            if (!DA.GetData(4, ref this.plumpness)) return points;
+            Debug.WriteLine($"length {points.Count}");
             foreach (double u in this.u_vals)
             {
                 foreach (double v in this.v_vals)
@@ -71,7 +70,7 @@ namespace Marinara
                            - (0.7 * (Math.Pow((Math.Sin((Math.PI * ((3 * v) / 8) + 1)) / 2), 3 + 1)));
 
                     Point3d p1 = new Point3d(x, y, z);
-                    Debug.WriteLine($"Generating point ({x},{y},{z})");
+                    //Debug.WriteLine($"Generating point ({x},{y},{z})");
                     points.Add(p1);
                 }
             }
@@ -125,7 +124,6 @@ namespace Marinara
 
         public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
         {
-            Debug.WriteLine($"Radiatori");
             List<Point3d> points = new List<Point3d>();
             if (!DA.GetData(4, ref this.tightness)) return points;
 
@@ -194,7 +192,6 @@ namespace Marinara
 
         public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
         {
-            Debug.WriteLine($"Radiatori");
             List<Point3d> points = new List<Point3d>();
             if (!DA.GetData(4, ref this.radius)) return points;
 
@@ -256,7 +253,7 @@ namespace Marinara
         {
             Debug.WriteLine($"Casarecce");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.radius)) return points;
+            if (!DA.GetData(4, ref this.radius)) return points;
 
             foreach (double u in this.u_vals)
             {
@@ -336,7 +333,7 @@ namespace Marinara
         {
             Debug.WriteLine($"Lancette");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.radius)) return points;
+            if (!DA.GetData(4, ref this.radius)) return points;
 
             foreach (double u in this.u_vals)
             {
@@ -429,7 +426,7 @@ namespace Marinara
         {
             Debug.WriteLine($"Lancette");
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.pinch)) return points;
+            if (!DA.GetData(4, ref this.pinch)) return points;
 
             foreach (double u in this.u_vals)
             {
@@ -488,9 +485,8 @@ namespace Marinara
 
         public override List<Point3d> SolveMarinara(IGH_DataAccess DA)
         {
-            Debug.WriteLine(this.GetType().Name);
             List<Point3d> points = new List<Point3d>();
-            if (!DA.GetData(3, ref this.plumpness)) return points;
+            if (!DA.GetData(4, ref this.plumpness)) return points;
 
             foreach (double u in this.u_vals)
             {

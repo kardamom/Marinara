@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System;
 using MarinaraTestHelpers;
+using System.Diagnostics.Contracts;
 
 namespace MarinaraUnitTestSuite
 {
@@ -17,7 +18,7 @@ namespace MarinaraUnitTestSuite
 
             List<TestPoint3d> pts = new List<TestPoint3d>();
             pts.Add(new TestPoint3d(-1, 2, 1));
-            pts.Add(new TestPoint3d(1, 4, -3));
+            pts.Add(new TestPoint3d(1, 4, -1));
             pts.Add(new TestPoint3d(3, 5, 1));
 
             float x_min, x_max, y_min, y_max, z_min, z_max, x_range, y_range, z_range;
@@ -53,22 +54,24 @@ namespace MarinaraUnitTestSuite
 
             Assert.AreEqual(5, y_max);
             Assert.AreEqual(2, y_min);
-            Assert.AreEqual(-3, z_min);
+            Assert.AreEqual(-1, z_min);
             Assert.AreEqual(1, z_max);
 
             x_range = x_max - x_min;
             y_range = y_max - y_min;
             z_range = z_max - z_min;
 
-            Assert.AreEqual(x_range, 4);
-            Assert.AreEqual(y_range, 3);
-            Assert.AreEqual(z_range, 4);
+            Assert.AreEqual(4, x_range);
+            Assert.AreEqual(3, y_range);
+            Assert.AreEqual(2, z_range);
 
             float normalized_len = 10;
             HelperMethods hm = new HelperMethods();
             List<TestPoint3d> new_pts = hm.NormalizePoints(pts, normalized_len);
 
-            Assert.AreEqual(-2.5, new_pts[0].x);
+            Assert.AreEqual(new_pts[0].x, -2.5);
+            Assert.AreEqual(new_pts[2].x, 7.5);
+            // Assert.AreEqual(
         }
     }
 }
